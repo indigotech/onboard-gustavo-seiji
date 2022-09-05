@@ -18,6 +18,9 @@ const App = () => {
   const [emailValue, setEmailValue] = React.useState('');
   const [passwordValue, setPasswordValue] = React.useState('');
   const [error, setError] = React.useState('');
+  const emailRegex = new RegExp('[a-zA-Z.]+@(?:[a-zA-Z]+)+.com');
+  const passNumberRegex = new RegExp('[0-9]');
+  const passCharRegex = new RegExp('[A-z]');
 
   const backgroundStyle = {
     backgroundColor: isDarkMode ? Colors.darker : Colors.white,
@@ -32,7 +35,7 @@ const App = () => {
           onChangeText={(text) => {
             setEmailValue(text);
           }}
-        ></TextInput>
+        />
       </View>
       <View>
         <Text>Senha</Text>
@@ -42,14 +45,11 @@ const App = () => {
           onChangeText={(text) => {
             setPasswordValue(text);
           }}
-        ></TextInput>
+        />
       </View>
       {!!error && <Text style={{ color: 'red' }}>{error}</Text>}
       <Button
         onPress={() => {
-          const emailRegex = new RegExp('[a-zA-Z.]+@(?:[a-zA-Z]+)+.com');
-          const passNumberRegex = new RegExp('[0-9]');
-          const passCharRegex = new RegExp('[A-z]');
           if (emailValue == '' || passwordValue == '') {
             setError('Preencha todos os campos');
           } else if (passwordValue.length < 7) {
