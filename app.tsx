@@ -9,7 +9,7 @@
  */
 
 import React from 'react';
-import { SafeAreaView, Text, useColorScheme } from 'react-native';
+import { SafeAreaView, Text, useColorScheme, TextInput, View, Button } from 'react-native';
 
 import { Colors } from 'react-native/Libraries/NewAppScreen';
 
@@ -17,12 +17,20 @@ const App = () => {
   const isDarkMode = useColorScheme() === 'dark';
 
   const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
+    backgroundColor: isDarkMode ? Colors.darker : Colors.white,
   };
 
   return (
     <SafeAreaView style={backgroundStyle}>
-      <Text>Hello world!</Text>
+      <View>
+        <Text>E-mail</Text>
+        <TextInput placeholder='ex:joao.silva@gmail.com'></TextInput>
+      </View>
+      <View>
+        <Text>Senha</Text>
+        <TextInput secureTextEntry placeholder='Senha'></TextInput>
+      </View>
+      <Button title='Login' />
     </SafeAreaView>
   );
 };
