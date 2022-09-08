@@ -9,7 +9,7 @@
  */
 
 import React from 'react';
-import { SafeAreaView, Text, useColorScheme, TextInput, View, Button } from 'react-native';
+import { SafeAreaView, Text, useColorScheme, TextInput, View, Button, Image } from 'react-native';
 
 import { Colors } from 'react-native/Libraries/NewAppScreen';
 import { validateLogin } from './src/utils/login-validator';
@@ -17,8 +17,9 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useMutation } from '@apollo/client';
 import { client } from './src/services/apolo-client';
 import { loginMutationGQL } from './src/services/graph-ql';
+import { Navigation, NavigationComponentProps } from 'react-native-navigation';
 
-const App = () => {
+const App = (props: NavigationComponentProps) => {
   const isDarkMode = useColorScheme() === 'dark';
   const [errorMessage, setErrorMessage] = React.useState('');
   const email = React.useRef('');
@@ -43,6 +44,18 @@ const App = () => {
       setErrorMessage(loginValidatorResult);
     } else {
       login();
+      Navigation.push(props.componentId, {
+        component: {
+          name: 'Page 2',
+          options: {
+            topBar: {
+              title: {
+                text: 'Page 2',
+              },
+            },
+          },
+        },
+      });
     }
   };
 
@@ -60,10 +73,26 @@ const App = () => {
         <Text>Senha</Text>
         <TextInput secureTextEntry placeholder='senha123' onChangeText={(text) => (password.current = text)} />
       </View>
-      {!!errorMessage && <Text style={{ color: 'red' }}>{errorMessage}</Text>}
-      <Button onPress={handleButtonPress} disabled={loading} title={loading ? 'Carregando' : 'Login'} />
+      {errorMessage && <Text style={{ color: 'red' }}>{errorMessage}</Text>}
+      {loading ? (
+        <Image source={require('./src/assets/loading.gif')} style={{ width: 40, height: 40 }} />
+      ) : (
+        <Button onPress={handleButtonPress} disabled={loading} title={loading ? 'Carregando' : 'Login'} />
+      )}
     </SafeAreaView>
   );
+};
+
+App.options = {
+  topBar: {
+    title: {
+      text: 'Login',
+      color: 'black',
+    },
+    background: {
+      color: 'white',
+    },
+  },
 };
 
 export default App;
