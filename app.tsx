@@ -30,6 +30,25 @@ const App = (props: NavigationComponentProps) => {
     src: require('./src/assets/loading.gif'),
   };
 
+  React.useEffect(() => {
+    AsyncStorage.getItem('token').then((token) => {
+      if (token) {
+        Navigation.push(props.componentId, {
+          component: {
+            name: 'Users',
+            options: {
+              topBar: {
+                title: {
+                  text: 'Users',
+                },
+              },
+            },
+          },
+        });
+      }
+    });
+  }, []);
+
   const login = () => {
     loginMutation({
       variables: { loginData: { email: email.current, password: password.current } },

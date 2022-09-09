@@ -3,7 +3,7 @@
  */
 
 import App from './app.tsx';
-import BlankPage from './src/blankPage';
+import BlankPage from './src/users-list';
 import { Navigation } from 'react-native-navigation';
 
 Navigation.registerComponent('Onboard', () => App);
