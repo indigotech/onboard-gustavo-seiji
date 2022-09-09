@@ -7,7 +7,7 @@ import BlankPage from './src/blankPage';
 import { Navigation } from 'react-native-navigation';
 
 Navigation.registerComponent('Onboard', () => App);
-Navigation.registerComponent('Page 2', () => BlankPage);
+Navigation.registerComponent('Users', () => BlankPage);
 Navigation.events().registerAppLaunchedListener(() => {
   Navigation.setRoot({
     root: {

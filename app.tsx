@@ -46,11 +46,11 @@ const App = (props: NavigationComponentProps) => {
       login();
       Navigation.push(props.componentId, {
         component: {
-          name: 'Page 2',
+          name: 'Users',
           options: {
             topBar: {
               title: {
-                text: 'Page 2',
+                text: 'Users',
               },
             },
           },
