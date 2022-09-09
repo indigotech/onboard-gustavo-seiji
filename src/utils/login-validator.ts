@@ -14,7 +14,5 @@ export const validateLogin = (email: string, password: string) => {
   if (!passNumberRegex.test(password) || !passCharRegex.test(password)) {
     error += 'O campo de senha deve conter ao menos uma letra e um número\n';
   }
-  error = error.slice(0, -1);
-  console.log(error);
-  return error;
+  return error.slice(0, -1);
 };
