@@ -9,7 +9,7 @@
  */
 
 import React from 'react';
-import { SafeAreaView, Text, useColorScheme, TextInput, View, Button } from 'react-native';
+import { SafeAreaView, Text, useColorScheme, TextInput, View, Button, Image } from 'react-native';
 
 import { Colors } from 'react-native/Libraries/NewAppScreen';
 import { validateLogin } from './src/utils/login-validator';
@@ -17,19 +17,35 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useMutation } from '@apollo/client';
 import { client } from './src/services/apolo-client';
 import { loginMutationGQL } from './src/services/graph-ql';
+import { Navigation, NavigationComponentProps } from 'react-native-navigation';
 
-const App = () => {
+const App = (props: NavigationComponentProps) => {
   const isDarkMode = useColorScheme() === 'dark';
   const [errorMessage, setErrorMessage] = React.useState('');
   const email = React.useRef('');
   const password = React.useRef('');
   const [loginMutation, { data, loading, error }] = useMutation(loginMutationGQL, { client });
+  const loadingGif = {
+    src: require('./src/assets/loading.gif'),
+  };
 
   const login = () => {
     loginMutation({
       variables: { loginData: { email: email.current, password: password.current } },
       onCompleted: (data) => {
         AsyncStorage.setItem('token', data.login.token);
+        Navigation.push(props.componentId, {
+          component: {
+            name: 'Users',
+            options: {
+              topBar: {
+                title: {
+                  text: 'Users',
+                },
+              },
+            },
+          },
+        });
       },
       onError: (error) => {
         setErrorMessage(error.message);
@@ -39,9 +55,10 @@ const App = () => {
 
   const handleButtonPress = () => {
     const loginValidatorResult = validateLogin(email.current, password.current);
-    if (loginValidatorResult !== null) {
+    if (loginValidatorResult !== '') {
       setErrorMessage(loginValidatorResult);
     } else {
+      setErrorMessage('');
       login();
     }
   };
@@ -60,10 +77,26 @@ const App = () => {
         <Text>Senha</Text>
         <TextInput secureTextEntry placeholder='senha123' onChangeText={(text) => (password.current = text)} />
       </View>
-      {!!errorMessage && <Text style={{ color: 'red' }}>{errorMessage}</Text>}
-      <Button onPress={handleButtonPress} disabled={loading} title={loading ? 'Carregando' : 'Login'} />
+      {errorMessage && <Text style={{ color: 'red' }}>{errorMessage}</Text>}
+      {loading ? (
+        <Image source={loadingGif.src} style={{ width: 40, height: 40 }} />
+      ) : (
+        <Button onPress={handleButtonPress} disabled={loading} title={loading ? 'Carregando' : 'Login'} />
+      )}
     </SafeAreaView>
   );
+};
+
+App.options = {
+  topBar: {
+    title: {
+      text: 'Login',
+      color: 'black',
+    },
+    background: {
+      color: 'white',
+    },
+  },
 };
 
 export default App;
