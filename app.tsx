@@ -12,57 +12,56 @@ import React from 'react';
 import { SafeAreaView, Text, useColorScheme, TextInput, View, Button } from 'react-native';
 
 import { Colors } from 'react-native/Libraries/NewAppScreen';
+import { validateLogin } from './src/utils/login-validator';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useMutation } from '@apollo/client';
+import { client } from './src/services/apolo-client';
+import { loginMutationGQL } from './src/services/graph-ql';
 
 const App = () => {
   const isDarkMode = useColorScheme() === 'dark';
-  const [error, setError] = React.useState('');
+  const [errorMessage, setErrorMessage] = React.useState('');
   const email = React.useRef('');
   const password = React.useRef('');
-  const emailRegex = new RegExp('[a-zA-Z.]+@(?:[a-zA-Z]+)+.com');
-  const passNumberRegex = new RegExp('[0-9]');
-  const passCharRegex = new RegExp('[A-z]');
+  const [loginMutation, { data, loading, error }] = useMutation(loginMutationGQL, { client });
+
+  const login = () => {
+    loginMutation({
+      variables: { loginData: { email: email.current, password: password.current } },
+      onCompleted: (data) => {
+        AsyncStorage.setItem('token', data.login.token);
+      },
+      onError: (error) => {
+        setErrorMessage(error.message);
+      },
+    });
+  };
 
   const handleButtonPress = () => {
-    if (email.current == '' || password.current == '') {
-      setError('Preencha todos os campos');
-    } else if (password.current.length < 7) {
-      setError('A senha deve possuir pelo menos 7 caracteres');
-    } else if (!emailRegex.test(email.current)) {
-      setError('O campo de email deve seguir o formato de um email: abc@def.com');
-    } else if (!passNumberRegex.test(password.current) || !passCharRegex.test(password.current)) {
-      setError('O campo de senha deve conter ao menos uma letra e um número');
+    const loginValidatorResult = validateLogin(email.current, password.current);
+    if (loginValidatorResult !== null) {
+      setErrorMessage(loginValidatorResult);
     } else {
-      setError('');
+      login();
     }
   };
 
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.white,
-  };
-
   return (
-    <SafeAreaView style={backgroundStyle}>
+    <SafeAreaView
+      style={{
+        backgroundColor: isDarkMode ? Colors.darker : Colors.white,
+      }}
+    >
       <View>
         <Text>E-mail</Text>
-        <TextInput
-          onChangeText={(text) => {
-            email.current = text;
-          }}
-          placeholder='ex:joao.silva@gmail.com'
-        />
+        <TextInput onChangeText={(text) => (email.current = text)} placeholder='ex:joao.silva@gmail.com' />
       </View>
       <View>
         <Text>Senha</Text>
-        <TextInput
-          secureTextEntry
-          placeholder='senha123'
-          onChangeText={(text) => {
-            password.current = text;
-          }}
-        />
+        <TextInput secureTextEntry placeholder='senha123' onChangeText={(text) => (password.current = text)} />
       </View>
-      {!!error && <Text style={{ color: 'red' }}>{error}</Text>}
-      <Button onPress={handleButtonPress} title='Login' />
+      {!!errorMessage && <Text style={{ color: 'red' }}>{errorMessage}</Text>}
+      <Button onPress={handleButtonPress} disabled={loading} title={loading ? 'Carregando' : 'Login'} />
     </SafeAreaView>
   );
 };
