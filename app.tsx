@@ -25,12 +25,27 @@ const App = (props: NavigationComponentProps) => {
   const email = React.useRef('');
   const password = React.useRef('');
   const [loginMutation, { data, loading, error }] = useMutation(loginMutationGQL, { client });
+  const loadingGif = {
+    src: require('./src/assets/loading.gif'),
+  };
 
   const login = () => {
     loginMutation({
       variables: { loginData: { email: email.current, password: password.current } },
       onCompleted: (data) => {
         AsyncStorage.setItem('token', data.login.token);
+        Navigation.push(props.componentId, {
+          component: {
+            name: 'Users',
+            options: {
+              topBar: {
+                title: {
+                  text: 'Users',
+                },
+              },
+            },
+          },
+        });
       },
       onError: (error) => {
         setErrorMessage(error.message);
@@ -40,22 +55,11 @@ const App = (props: NavigationComponentProps) => {
 
   const handleButtonPress = () => {
     const loginValidatorResult = validateLogin(email.current, password.current);
-    if (loginValidatorResult !== null) {
+    if (loginValidatorResult !== '') {
       setErrorMessage(loginValidatorResult);
     } else {
+      setErrorMessage('');
       login();
-      Navigation.push(props.componentId, {
-        component: {
-          name: 'Users',
-          options: {
-            topBar: {
-              title: {
-                text: 'Users',
-              },
-            },
-          },
-        },
-      });
     }
   };
 
@@ -75,7 +79,7 @@ const App = (props: NavigationComponentProps) => {
       </View>
       {errorMessage && <Text style={{ color: 'red' }}>{errorMessage}</Text>}
       {loading ? (
-        <Image source={require('./src/assets/loading.gif')} style={{ width: 40, height: 40 }} />
+        <Image source={loadingGif.src} style={{ width: 40, height: 40 }} />
       ) : (
         <Button onPress={handleButtonPress} disabled={loading} title={loading ? 'Carregando' : 'Login'} />
       )}
