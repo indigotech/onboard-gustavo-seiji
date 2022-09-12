@@ -9,22 +9,23 @@
  */
 
 import React from 'react';
-import { SafeAreaView, Text, useColorScheme, TextInput, View, Button, Image } from 'react-native';
+import { SafeAreaView, Text, TextInput, View, Image, useColorScheme, TouchableOpacity } from 'react-native';
 
-import { Colors } from 'react-native/Libraries/NewAppScreen';
 import { validateLogin } from './src/utils/login-validator';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useMutation } from '@apollo/client';
 import { client } from './src/services/apolo-client';
 import { loginMutationGQL } from './src/services/graph-ql';
 import { Navigation, NavigationComponentProps } from 'react-native-navigation';
+import { loginPageStyles } from './src/styles';
+import { Colors } from 'react-native/Libraries/NewAppScreen';
 
 const App = (props: NavigationComponentProps) => {
   const isDarkMode = useColorScheme() === 'dark';
   const [errorMessage, setErrorMessage] = React.useState('');
   const email = React.useRef('');
   const password = React.useRef('');
-  const [loginMutation, { data, loading, error }] = useMutation(loginMutationGQL, { client });
+  const [loginMutation, { loading }] = useMutation(loginMutationGQL, { client });
   const loadingGif = {
     src: require('./src/assets/loading.gif'),
   };
@@ -65,23 +66,39 @@ const App = (props: NavigationComponentProps) => {
 
   return (
     <SafeAreaView
-      style={{
-        backgroundColor: isDarkMode ? Colors.darker : Colors.white,
-      }}
+      style={[
+        loginPageStyles.loginPageWrapper,
+        {
+          backgroundColor: isDarkMode ? Colors.darker : Colors.white,
+        },
+      ]}
     >
-      <View>
+      <View style={loginPageStyles.inputContainer}>
         <Text>E-mail</Text>
-        <TextInput onChangeText={(text) => (email.current = text)} placeholder='ex:joao.silva@gmail.com' />
+        <TextInput
+          style={loginPageStyles.textInput}
+          onChangeText={(text) => (email.current = text)}
+          placeholder='Ex:joao.silva@gmail.com'
+        />
       </View>
-      <View>
+      <View style={loginPageStyles.inputContainer}>
         <Text>Senha</Text>
-        <TextInput secureTextEntry placeholder='senha123' onChangeText={(text) => (password.current = text)} />
+        <TextInput
+          style={loginPageStyles.textInput}
+          secureTextEntry
+          placeholder='Ex: senha123'
+          onChangeText={(text) => (password.current = text)}
+        />
       </View>
-      {errorMessage && <Text style={{ color: 'red' }}>{errorMessage}</Text>}
+      {errorMessage && <Text style={loginPageStyles.errorText}>{errorMessage}</Text>}
       {loading ? (
         <Image source={loadingGif.src} style={{ width: 40, height: 40 }} />
       ) : (
-        <Button onPress={handleButtonPress} disabled={loading} title={loading ? 'Carregando' : 'Login'} />
+        <TouchableOpacity style={loginPageStyles.loginButton} onPress={handleButtonPress}>
+          <View>
+            <Text style={{ color: 'white' }}>{loading ? 'Carregando' : 'Login'}</Text>
+          </View>
+        </TouchableOpacity>
       )}
     </SafeAreaView>
   );
