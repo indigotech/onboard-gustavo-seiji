@@ -43,6 +43,7 @@ const UsersList = () => {
   return (
     <SafeAreaView style={usersPage.wrapper}>
       <Text style={usersPage.title}>Lista de usuários</Text>
+      {loading && !data && <Image source={loadingGif.src} style={loadingGifStyle} />}
       {error && <Text style={usersPage.error}>{error.message}</Text>}
       {users && (
         <FlatList
@@ -52,9 +53,13 @@ const UsersList = () => {
           keyExtractor={(item) => item.id}
           onEndReached={handleEndReach}
           onEndReachedThreshold={0.2}
+          ListFooterComponent={
+            loading && data ? (
+              <Image source={loadingGif.src} style={[loadingGifStyle, { alignSelf: 'center' }]} />
+            ) : null
+          }
         />
       )}
-      {loading && <Image source={loadingGif.src} style={loadingGifStyle} />}
     </SafeAreaView>
   );
 };
