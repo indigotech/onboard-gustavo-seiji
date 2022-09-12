@@ -17,7 +17,7 @@ import { useMutation } from '@apollo/client';
 import { client } from './src/services/apollo-client';
 import { loginMutationGQL } from './src/services/graph-ql';
 import { Navigation, NavigationComponentProps } from 'react-native-navigation';
-import { loginPageStyles } from './src/styles';
+import { loginPage } from './src/styles';
 import { Colors } from 'react-native/Libraries/NewAppScreen';
 
 const App = (props: NavigationComponentProps) => {
@@ -86,34 +86,34 @@ const App = (props: NavigationComponentProps) => {
   return (
     <SafeAreaView
       style={[
-        loginPageStyles.loginPageWrapper,
+        loginPage.loginPageWrapper,
         {
           backgroundColor: isDarkMode ? Colors.darker : Colors.white,
         },
       ]}
     >
-      <View style={loginPageStyles.inputContainer}>
+      <View style={loginPage.inputContainer}>
         <Text>E-mail</Text>
         <TextInput
-          style={loginPageStyles.textInput}
+          style={loginPage.textInput}
           onChangeText={(text) => (email.current = text)}
           placeholder='Ex:joao.silva@gmail.com'
         />
       </View>
-      <View style={loginPageStyles.inputContainer}>
+      <View style={loginPage.inputContainer}>
         <Text>Senha</Text>
         <TextInput
-          style={loginPageStyles.textInput}
+          style={loginPage.textInput}
           secureTextEntry
           placeholder='Ex: senha123'
           onChangeText={(text) => (password.current = text)}
         />
       </View>
-      {errorMessage && <Text style={loginPageStyles.errorText}>{errorMessage}</Text>}
+      {errorMessage && <Text style={loginPage.errorText}>{errorMessage}</Text>}
       {loading ? (
         <Image source={loadingGif.src} style={{ width: 40, height: 40 }} />
       ) : (
-        <TouchableOpacity style={loginPageStyles.loginButton} onPress={handleButtonPress}>
+        <TouchableOpacity style={loginPage.loginButton} onPress={handleButtonPress}>
           <View>
             <Text style={{ color: 'white' }}>{loading ? 'Carregando' : 'Login'}</Text>
           </View>
