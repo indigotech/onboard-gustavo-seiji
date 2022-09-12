@@ -1,5 +1,7 @@
 import { StyleSheet } from 'react-native';
 
+export const loadingGifStyle = { width: 40, height: 40 };
+
 export const loginPage = StyleSheet.create({
   loginPageWrapper: {
     alignItems: 'center',
@@ -46,5 +48,8 @@ export const usersPage = StyleSheet.create({
   },
   name: {
     width: '30%',
+  },
+  error: {
+    color: 'red',
   },
 });

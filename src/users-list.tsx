@@ -1,20 +1,31 @@
 import React from 'react';
-import { FlatList, SafeAreaView, Text, View } from 'react-native';
-import { data } from './mockList';
+import { FlatList, Image, SafeAreaView, Text, View } from 'react-native';
 import { userItemInterface } from './interfaces';
-import { usersPage } from './styles';
+import { loadingGifStyle, usersPage } from './styles';
+import { client } from './services/apollo-client';
+import { usersQueryGQL } from './services/graph-ql';
+import { useLazyQuery } from '@apollo/client';
 
 const UsersList = () => {
+  const [usersLazyQuery, { data, loading, error }] = useLazyQuery(usersQueryGQL, { client });
+  const loadingGif = {
+    src: require('./assets/loading.gif'),
+  };
   const renderUser = ({ item }: { item: userItemInterface }) => (
     <View style={usersPage.userItem}>
       <Text style={usersPage.name}>{item.name}</Text>
       <Text>{item.email}</Text>
     </View>
   );
+  React.useEffect(() => {
+    usersLazyQuery();
+  }, []);
   return (
     <SafeAreaView style={usersPage.wrapper}>
       <Text style={usersPage.title}>Lista de usuários</Text>
-      <FlatList data={data.users} renderItem={renderUser} />
+      {loading && <Image style={loadingGifStyle} source={loadingGif.src} />}
+      {error && <Text style={usersPage.error}>{error.message}</Text>}
+      {data && <FlatList data={data?.users.nodes} renderItem={renderUser} keyExtractor={(item) => item.id} />}
     </SafeAreaView>
   );
 };

@@ -15,3 +15,15 @@ export const loginMutationGQL = gql`
     }
   }
 `;
+
+export const usersQueryGQL = gql`
+  query {
+    users {
+      nodes {
+        name
+        email
+        id
+      }
+    }
+  }
+`;

@@ -12,13 +12,13 @@ import React from 'react';
 import { SafeAreaView, Text, TextInput, View, Image, useColorScheme, TouchableOpacity } from 'react-native';
 
 import { validateLogin } from './src/utils/login-validator';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useMutation } from '@apollo/client';
 import { client } from './src/services/apollo-client';
 import { loginMutationGQL } from './src/services/graph-ql';
 import { Navigation, NavigationComponentProps } from 'react-native-navigation';
-import { loginPage } from './src/styles';
+import { loadingGifStyle, loginPage } from './src/styles';
 import { Colors } from 'react-native/Libraries/NewAppScreen';
+import { getStorageItem, setStorageItem } from './src/services/persistency';
 
 const App = (props: NavigationComponentProps) => {
   const isDarkMode = useColorScheme() === 'dark';
@@ -31,7 +31,7 @@ const App = (props: NavigationComponentProps) => {
   };
 
   React.useEffect(() => {
-    AsyncStorage.getItem('token').then((token) => {
+    getStorageItem('token').then((token) => {
       if (token) {
         Navigation.push(props.componentId, {
           component: {
@@ -53,7 +53,7 @@ const App = (props: NavigationComponentProps) => {
     loginMutation({
       variables: { loginData: { email: email.current, password: password.current } },
       onCompleted: (data) => {
-        AsyncStorage.setItem('token', data.login.token);
+        setStorageItem('token', data.login.token);
         Navigation.push(props.componentId, {
           component: {
             name: 'Users',
@@ -111,7 +111,7 @@ const App = (props: NavigationComponentProps) => {
       </View>
       {errorMessage && <Text style={loginPage.errorText}>{errorMessage}</Text>}
       {loading ? (
-        <Image source={loadingGif.src} style={{ width: 40, height: 40 }} />
+        <Image source={loadingGif.src} style={loadingGifStyle} />
       ) : (
         <TouchableOpacity style={loginPage.loginButton} onPress={handleButtonPress}>
           <View>
