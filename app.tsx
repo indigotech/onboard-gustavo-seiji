@@ -14,7 +14,7 @@ import { SafeAreaView, Text, TextInput, View, Image, useColorScheme, TouchableOp
 import { validateLogin } from './src/utils/login-validator';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useMutation } from '@apollo/client';
-import { client } from './src/services/apolo-client';
+import { client } from './src/services/apollo-client';
 import { loginMutationGQL } from './src/services/graph-ql';
 import { Navigation, NavigationComponentProps } from 'react-native-navigation';
 import { loginPageStyles } from './src/styles';
