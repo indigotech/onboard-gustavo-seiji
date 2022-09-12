@@ -22,7 +22,7 @@ const UsersList = () => {
       <Text>{item.email}</Text>
     </View>
   );
-  const handlePress = () => {
+  const handleEndReach = () => {
     if (data.users.pageInfo.hasNextPage && !loading) {
       setLoading(true);
       fetchMore({ variables: { pageInfo: { offset: data.users.pageInfo.offset + 20, limit: 20 } } })
@@ -45,7 +45,7 @@ const UsersList = () => {
           data={data.users.nodes}
           renderItem={renderUser}
           keyExtractor={(item) => item.id}
-          onEndReached={handlePress}
+          onEndReached={handleEndReach}
           onEndReachedThreshold={0.1}
         />
       )}
