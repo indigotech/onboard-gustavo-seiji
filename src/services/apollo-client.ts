@@ -29,7 +29,6 @@ export const client = new ApolloClient({
             // Concatenate the incoming list items with
             // the existing list items.
             merge(existing, incoming) {
-              console.log('teste');
               if (!incoming) return existing;
               if (!existing) return incoming;
               const { nodes, ...rest } = incoming;
