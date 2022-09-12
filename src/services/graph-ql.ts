@@ -21,7 +21,6 @@ export const usersQueryGQL = gql`
     users(pageInfo: $pageInfo) {
       pageInfo {
         hasNextPage
-        offset
       }
       nodes {
         name

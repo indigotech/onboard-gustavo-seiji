@@ -9,10 +9,13 @@ import { loadingGif } from './utils/loading-gif';
 
 const UsersList = () => {
   const [loading, setLoading] = React.useState(true);
+  const [users, setUsers] = React.useState<userItemInterface[]>([]);
+  const offset = React.useRef(0);
   const { data, error, fetchMore } = useQuery(usersQueryGQL, {
     client,
     variables: { pageInfo: { offset: 0, limit: 20 } },
-    onCompleted: () => {
+    onCompleted: (data) => {
+      setUsers(data.users.nodes);
       setLoading(false);
     },
   });
@@ -25,8 +28,10 @@ const UsersList = () => {
   const handleEndReach = () => {
     if (data.users.pageInfo.hasNextPage && !loading) {
       setLoading(true);
-      fetchMore({ variables: { pageInfo: { offset: data.users.pageInfo.offset + 20, limit: 20 } } })
-        .then(() => {
+      fetchMore({ variables: { pageInfo: { offset: offset.current + 20, limit: 20 } } })
+        .then((data) => {
+          offset.current += 20;
+          setUsers([...users, ...data.data.users.nodes]);
           setLoading(false);
         })
         .catch((error) => {
@@ -39,14 +44,14 @@ const UsersList = () => {
     <SafeAreaView style={usersPage.wrapper}>
       <Text style={usersPage.title}>Lista de usuários</Text>
       {error && <Text style={usersPage.error}>{error.message}</Text>}
-      {data && (
+      {users && (
         <FlatList
           style={usersPage.usersContainer}
-          data={data.users.nodes}
+          data={users}
           renderItem={renderUser}
           keyExtractor={(item) => item.id}
           onEndReached={handleEndReach}
-          onEndReachedThreshold={0.1}
+          onEndReachedThreshold={0.2}
         />
       )}
       {loading && <Image source={loadingGif.src} style={loadingGifStyle} />}
