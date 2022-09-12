@@ -4,10 +4,10 @@ import { userItemInterface } from './interfaces';
 import { loadingGifStyle, usersPage } from './styles';
 import { client } from './services/apollo-client';
 import { usersQueryGQL } from './services/graph-ql';
-import { useLazyQuery } from '@apollo/client';
+import { useLazyQuery, useQuery } from '@apollo/client';
 
 const UsersList = () => {
-  const [usersLazyQuery, { data, loading, error }] = useLazyQuery(usersQueryGQL, { client });
+  const { data, loading, error } = useQuery(usersQueryGQL, { client });
   const loadingGif = {
     src: require('./assets/loading.gif'),
   };
@@ -17,9 +17,6 @@ const UsersList = () => {
       <Text>{item.email}</Text>
     </View>
   );
-  React.useEffect(() => {
-    usersLazyQuery();
-  }, []);
   return (
     <SafeAreaView style={usersPage.wrapper}>
       <Text style={usersPage.title}>Lista de usuários</Text>
