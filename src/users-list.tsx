@@ -4,7 +4,7 @@ import { data } from './mockList';
 import { userItemInterface } from './interfaces';
 import { usersPage } from './styles';
 
-const BlankPage = () => {
+const UsersList = () => {
   const renderUser = ({ item }: { item: userItemInterface }) => (
     <View style={usersPage.userItem}>
       <Text style={usersPage.name}>{item.name}</Text>
@@ -19,4 +19,4 @@ const BlankPage = () => {
   );
 };
 
-export default BlankPage;
+export default UsersList;
