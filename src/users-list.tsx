@@ -8,16 +8,10 @@ import { useQuery } from '@apollo/client';
 import { loadingGif } from './utils/loading-gif';
 
 const UsersList = () => {
-  const [loading, setLoading] = React.useState(true);
-  const [users, setUsers] = React.useState<userItemInterface[]>([]);
-  const offset = React.useRef(0);
-  const { data, error, fetchMore } = useQuery(usersQueryGQL, {
+  const { data, loading, error, fetchMore } = useQuery(usersQueryGQL, {
     client,
     variables: { pageInfo: { offset: 0, limit: 20 } },
-    onCompleted: (data) => {
-      setUsers(data.users.nodes);
-      setLoading(false);
-    },
+    notifyOnNetworkStatusChange: true,
   });
   const renderUser = ({ item }: { item: userItemInterface }) => (
     <View style={usersPage.userItem}>
@@ -27,17 +21,7 @@ const UsersList = () => {
   );
   const handleEndReach = () => {
     if (data.users.pageInfo.hasNextPage && !loading) {
-      setLoading(true);
-      fetchMore({ variables: { pageInfo: { offset: offset.current + 20, limit: 20 } } })
-        .then((data) => {
-          offset.current += 20;
-          setUsers([...users, ...data.data.users.nodes]);
-          setLoading(false);
-        })
-        .catch((error) => {
-          console.log(error);
-          setLoading(false);
-        });
+      fetchMore({ variables: { pageInfo: { offset: data.users.pageInfo.offset + 20, limit: 20 } } });
     }
   };
   return (
@@ -45,14 +29,14 @@ const UsersList = () => {
       <Text style={usersPage.title}>Lista de usuários</Text>
       {loading && !data && <Image source={loadingGif.src} style={loadingGifStyle} />}
       {error && <Text style={usersPage.error}>{error.message}</Text>}
-      {users && (
+      {data && (
         <FlatList
           style={usersPage.usersContainer}
-          data={users}
+          data={data.users.nodes}
           renderItem={renderUser}
           keyExtractor={(item) => item.id}
           onEndReached={handleEndReach}
-          onEndReachedThreshold={0.2}
+          onEndReachedThreshold={0.15}
           ListFooterComponent={
             loading && data ? (
               <Image source={loadingGif.src} style={[loadingGifStyle, { alignSelf: 'center' }]} />
