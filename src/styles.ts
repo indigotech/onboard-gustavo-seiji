@@ -1,6 +1,6 @@
 import { StyleSheet } from 'react-native';
 
-export const loginPageStyles = StyleSheet.create({
+export const loginPage = StyleSheet.create({
   loginPageWrapper: {
     alignItems: 'center',
     height: '100%',
@@ -27,5 +27,24 @@ export const loginPageStyles = StyleSheet.create({
   errorText: {
     color: 'red',
     marginBottom: 15,
+  },
+});
+
+export const usersPage = StyleSheet.create({
+  wrapper: {
+    alignItems: 'center',
+    height: '100%',
+  },
+  title: {
+    fontSize: 22,
+    marginTop: 5,
+  },
+  userItem: {
+    marginHorizontal: 10,
+    marginVertical: 5,
+    flexDirection: 'row',
+  },
+  name: {
+    width: '30%',
   },
 });

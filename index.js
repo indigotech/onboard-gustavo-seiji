@@ -3,11 +3,11 @@
  */
 
 import App from './app.tsx';
-import BlankPage from './src/blankPage';
 import { Navigation } from 'react-native-navigation';
+import UsersList from './src/users-list';
 
 Navigation.registerComponent('Onboard', () => App);
-Navigation.registerComponent('Users', () => BlankPage);
+Navigation.registerComponent('Users', () => UsersList);
 Navigation.events().registerAppLaunchedListener(() => {
   Navigation.setRoot({
     root: {
