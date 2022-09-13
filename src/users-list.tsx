@@ -4,13 +4,11 @@ import { userItemInterface } from './interfaces';
 import { loadingGifStyle, usersPage } from './styles';
 import { client } from './services/apollo-client';
 import { usersQueryGQL } from './services/graph-ql';
-import { useLazyQuery, useQuery } from '@apollo/client';
+import { useQuery } from '@apollo/client';
+import { loadingGif } from './utils/loading-gif';
 
 const UsersList = () => {
   const { data, loading, error } = useQuery(usersQueryGQL, { client });
-  const loadingGif = {
-    src: require('./assets/loading.gif'),
-  };
   const renderUser = ({ item }: { item: userItemInterface }) => (
     <View style={usersPage.userItem}>
       <Text style={usersPage.name}>{item.name}</Text>

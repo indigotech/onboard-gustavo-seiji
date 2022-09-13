@@ -19,6 +19,7 @@ import { Navigation, NavigationComponentProps } from 'react-native-navigation';
 import { loadingGifStyle, loginPage } from './src/styles';
 import { Colors } from 'react-native/Libraries/NewAppScreen';
 import { getStorageItem, setStorageItem } from './src/services/persistency';
+import { loadingGif } from './src/utils/loading-gif';
 
 const App = (props: NavigationComponentProps) => {
   const isDarkMode = useColorScheme() === 'dark';
@@ -26,9 +27,6 @@ const App = (props: NavigationComponentProps) => {
   const email = React.useRef('');
   const password = React.useRef('');
   const [loginMutation, { loading }] = useMutation(loginMutationGQL, { client });
-  const loadingGif = {
-    src: require('./src/assets/loading.gif'),
-  };
 
   React.useEffect(() => {
     getStorageItem('token').then((token) => {
