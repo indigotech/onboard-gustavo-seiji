@@ -20,6 +20,7 @@ import { loadingGifStyle, loginPage } from './src/styles';
 import { Colors } from 'react-native/Libraries/NewAppScreen';
 import { getStorageItem, setStorageItem } from './src/services/persistency';
 import { loadingGif } from './src/utils/loading-gif';
+import { navigateToPage } from './src/utils/navigateToPage';
 
 const App = (props: NavigationComponentProps) => {
   const isDarkMode = useColorScheme() === 'dark';
@@ -31,18 +32,7 @@ const App = (props: NavigationComponentProps) => {
   React.useEffect(() => {
     getStorageItem('token').then((token) => {
       if (token) {
-        Navigation.push(props.componentId, {
-          component: {
-            name: 'Users',
-            options: {
-              topBar: {
-                title: {
-                  text: 'Users',
-                },
-              },
-            },
-          },
-        });
+        navigateToPage('Users', props.componentId);
       }
     });
   }, []);
