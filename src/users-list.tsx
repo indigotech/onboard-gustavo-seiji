@@ -6,6 +6,7 @@ import { client } from './services/apollo-client';
 import { usersQueryGQL } from './services/graph-ql';
 import { useQuery } from '@apollo/client';
 import { loadingGif } from './utils/loading-gif';
+import { logout } from './services/logout';
 
 const UsersList = () => {
   const { data, loading, error, fetchMore } = useQuery(usersQueryGQL, {
@@ -13,6 +14,7 @@ const UsersList = () => {
     variables: { pageInfo: { offset: 0, limit: 20 } },
     notifyOnNetworkStatusChange: true,
   });
+  if (error?.message === 'Usuário sem credenciais válidas.') logout();
   const renderUser = ({ item }: { item: userItemInterface }) => (
     <View style={usersPage.userItem}>
       <Text>{item.name}</Text>
