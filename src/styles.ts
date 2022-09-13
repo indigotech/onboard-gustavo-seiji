@@ -34,20 +34,26 @@ export const loginPage = StyleSheet.create({
 
 export const usersPage = StyleSheet.create({
   wrapper: {
-    alignItems: 'center',
     height: '100%',
+    alignItems: 'center',
   },
   title: {
     fontSize: 22,
     marginTop: 5,
   },
   userItem: {
-    marginHorizontal: 10,
     marginVertical: 5,
-    flexDirection: 'row',
+    marginHorizontal: 25,
+  },
+  usersContainer: {
+    width: '100%',
+    alignSelf: 'flex-start',
   },
   name: {
-    width: '30%',
+    width: '100%',
+  },
+  email: {
+    width: '100%',
   },
   error: {
     color: 'red',

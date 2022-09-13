@@ -17,8 +17,12 @@ export const loginMutationGQL = gql`
 `;
 
 export const usersQueryGQL = gql`
-  query {
-    users {
+  query getUsers($pageInfo: PageInputType) {
+    users(pageInfo: $pageInfo) {
+      pageInfo {
+        hasNextPage
+        offset
+      }
       nodes {
         name
         email

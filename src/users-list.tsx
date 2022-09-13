@@ -8,19 +8,42 @@ import { useQuery } from '@apollo/client';
 import { loadingGif } from './utils/loading-gif';
 
 const UsersList = () => {
-  const { data, loading, error } = useQuery(usersQueryGQL, { client });
+  const { data, loading, error, fetchMore } = useQuery(usersQueryGQL, {
+    client,
+    variables: { pageInfo: { offset: 0, limit: 20 } },
+    notifyOnNetworkStatusChange: true,
+  });
   const renderUser = ({ item }: { item: userItemInterface }) => (
     <View style={usersPage.userItem}>
-      <Text style={usersPage.name}>{item.name}</Text>
+      <Text>{item.name}</Text>
       <Text>{item.email}</Text>
     </View>
   );
+  const handleEndReach = () => {
+    if (data.users.pageInfo.hasNextPage && !loading) {
+      fetchMore({ variables: { pageInfo: { offset: data.users.pageInfo.offset + 20, limit: 20 } } });
+    }
+  };
   return (
     <SafeAreaView style={usersPage.wrapper}>
       <Text style={usersPage.title}>Lista de usuários</Text>
-      {loading && <Image style={loadingGifStyle} source={loadingGif.src} />}
+      {loading && !data && <Image source={loadingGif.src} style={loadingGifStyle} />}
       {error && <Text style={usersPage.error}>{error.message}</Text>}
-      {data && <FlatList data={data?.users.nodes} renderItem={renderUser} keyExtractor={(item) => item.id} />}
+      {data && (
+        <FlatList
+          style={usersPage.usersContainer}
+          data={data.users.nodes}
+          renderItem={renderUser}
+          keyExtractor={(item) => item.id}
+          onEndReached={handleEndReach}
+          onEndReachedThreshold={0.15}
+          ListFooterComponent={
+            loading && data ? (
+              <Image source={loadingGif.src} style={[loadingGifStyle, { alignSelf: 'center' }]} />
+            ) : null
+          }
+        />
+      )}
     </SafeAreaView>
   );
 };
