@@ -2,6 +2,25 @@ import { StyleSheet } from 'react-native';
 
 export const loadingGifStyle = { width: 40, height: 40 };
 
+export const detailsPage = StyleSheet.create({
+  title: {
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+  data: {
+    fontSize: 16,
+  },
+  h1: {
+    fontSize: 24,
+    marginTop: 15,
+    fontWeight: 'bold',
+  },
+  dataWrapper: {
+    marginTop: 10,
+    alignItems: 'center',
+  },
+});
+
 export const loginPage = StyleSheet.create({
   loginPageWrapper: {
     alignItems: 'center',
