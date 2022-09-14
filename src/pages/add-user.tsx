@@ -1,46 +1,86 @@
 import React from 'react';
-import { SafeAreaView, ScrollView, Text, TouchableOpacity, View } from 'react-native';
-import TextInputComponent from '../components/TextInput';
+import { Image, SafeAreaView, ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import TextInputComponent from '../components/text-input';
 import { general } from '../styles';
-import TextInputMask from 'react-native-text-input-mask';
+import CustomButton from './custom-button';
+import { formatDate } from '../utils/format-date';
+import { createUserMutationGQL } from '../services/graph-ql';
+import { client } from '../services/apollo-client';
+import { useMutation } from '@apollo/client';
+import { Navigation, NavigationComponentProps } from 'react-native-navigation';
+import { loadingGif } from '../utils/get-media';
+import { validateCreateUser } from '../utils/validate-create-user';
 
-const AddUser = () => {
+const AddUser = (props: NavigationComponentProps) => {
   const [role, setRole] = React.useState('user');
   const [date, setDate] = React.useState('');
-  const handleDateChange = (formatted: string) => {
-    const formattedArray = formatted.split('/');
-    if (eval(formattedArray[0]) > 31) {
-      formattedArray[0] = '31';
+  const fullName = React.useRef('');
+  const phone = React.useRef('');
+  const email = React.useRef('');
+  const password = React.useRef('');
+  const [error, setError] = React.useState('');
+  const [createUser, { loading }] = useMutation(createUserMutationGQL, { client });
+  const handleButtonPress = () => {
+    const error = validateCreateUser(fullName.current, phone.current, email.current, date, password.current);
+    setError(error);
+    if (error === '') {
+      const dateArray = date.split('/');
+      const birthDate = `${dateArray[2]}-${dateArray[1]}-${dateArray[0]}`;
+      createUser({
+        variables: {
+          data: {
+            name: fullName.current,
+            email: email.current,
+            phone: phone.current,
+            birthDate,
+            password: password.current,
+            role,
+          },
+        },
+        onCompleted: () => {
+          Navigation.push(props.componentId, {
+            component: {
+              name: 'Users',
+              options: {
+                topBar: {
+                  title: {
+                    text: 'Usuários',
+                    alignment: 'center',
+                  },
+                },
+              },
+            },
+          });
+        },
+        onError: (error) => {
+          setError(error.message);
+        },
+      });
     }
-    if (eval(formattedArray[1]) > 12) {
-      formattedArray[1] = '12';
-    }
-    const currentDate = new Date();
-    if (eval(formattedArray[2]) > currentDate.getFullYear()) {
-      formattedArray[2] = currentDate.getFullYear().toString();
-    }
-    if (formatted.length === 10) {
-      if (currentDate.getFullYear() - eval(formattedArray[2]) > 130) {
-        formattedArray[2] = (currentDate.getFullYear() - 130).toString();
-      }
-    }
-    setDate(formattedArray.join('/'));
   };
+
   return (
     <ScrollView>
       <SafeAreaView style={general.centeredWrapper}>
-        <TextInputComponent name='Nome Completo' />
-        <TextInputComponent name='Telefone' />
-        <View style={general.inputContainer}>
-          <Text>Data de Nascimento</Text>
-          <TextInputMask
-            mask={'[00]/[00]/[0000]'}
-            style={general.textInput}
-            value={date}
-            onChangeText={handleDateChange}
-          />
-        </View>
-        <TextInputComponent name='E-mail' />
+        <TextInputComponent name='Nome Completo' handleChange={(value) => (fullName.current = value)} />
+        <TextInputComponent
+          name='Telefone'
+          mask={'([00]) [00000]-[0000]'}
+          keyboardType='numeric'
+          handleChange={(formatted, extracted) => {
+            if (extracted) {
+              phone.current = extracted;
+            }
+          }}
+        />
+        <TextInputComponent
+          name='Data de Nascimento'
+          mask={'[00]/[00]/[0000]'}
+          keyboardType='numeric'
+          value={date}
+          handleChange={(formatted) => setDate(formatDate(formatted))}
+        />
+        <TextInputComponent name='E-mail' handleChange={(value) => (email.current = value)} />
         <View style={general.inputContainer}>
           <Text>Função do Usuário</Text>
           <TouchableOpacity
@@ -62,12 +102,10 @@ const AddUser = () => {
             <Text>Administrador</Text>
           </TouchableOpacity>
         </View>
-        <TextInputComponent password name='Senha' />
-        <TouchableOpacity style={general.button}>
-          <View>
-            <Text style={{ color: 'white' }}>Adicionar Usuário</Text>
-          </View>
-        </TouchableOpacity>
+        <TextInputComponent password name='Senha' handleChange={(value) => (password.current = value)} />
+        {error && <Text style={general.errorText}>{error}</Text>}
+        {loading && <Image source={loadingGif.src} style={general.loadingGifStyle} />}
+        <CustomButton title='Adicionar Usuário' handleClick={handleButtonPress} />
       </SafeAreaView>
     </ScrollView>
   );

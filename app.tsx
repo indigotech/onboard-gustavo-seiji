@@ -9,16 +9,18 @@
  */
 
 import React from 'react';
-import { SafeAreaView, Text, TextInput, View, Image, TouchableOpacity } from 'react-native';
+import { SafeAreaView, Text, Image } from 'react-native';
 
 import { validateLogin } from './src/utils/login-validator';
 import { useMutation } from '@apollo/client';
 import { client } from './src/services/apollo-client';
 import { loginMutationGQL } from './src/services/graph-ql';
 import { Navigation, NavigationComponentProps } from 'react-native-navigation';
-import { general, loadingGifStyle, loginPage } from './src/styles';
+import { general } from './src/styles';
 import { getStorageItem, setStorageItem } from './src/services/persistency';
 import { loadingGif } from './src/utils/get-media';
+import TextInputComponent from './src/components/text-input';
+import CustomButton from './src/pages/custom-button';
 
 const App = (props: NavigationComponentProps) => {
   const [errorMessage, setErrorMessage] = React.useState('');
@@ -83,32 +85,13 @@ const App = (props: NavigationComponentProps) => {
 
   return (
     <SafeAreaView style={general.centeredWrapper}>
-      <View style={general.inputContainer}>
-        <Text>E-mail</Text>
-        <TextInput
-          style={general.textInput}
-          onChangeText={(text) => (email.current = text)}
-          placeholder='Ex:joao.silva@gmail.com'
-        />
-      </View>
-      <View style={general.inputContainer}>
-        <Text>Senha</Text>
-        <TextInput
-          style={general.textInput}
-          secureTextEntry
-          placeholder='Ex: senha123'
-          onChangeText={(text) => (password.current = text)}
-        />
-      </View>
-      {errorMessage && <Text style={loginPage.errorText}>{errorMessage}</Text>}
+      <TextInputComponent name='E-mail' handleChange={(value) => (email.current = value)} />
+      <TextInputComponent name='Senha' handleChange={(value) => (password.current = value)} password />
+      {errorMessage && <Text style={general.errorText}>{errorMessage}</Text>}
       {loading ? (
-        <Image source={loadingGif.src} style={loadingGifStyle} />
+        <Image source={loadingGif.src} style={general.loadingGifStyle} />
       ) : (
-        <TouchableOpacity style={general.button} onPress={handleButtonPress}>
-          <View>
-            <Text style={{ color: 'white' }}>Login</Text>
-          </View>
-        </TouchableOpacity>
+        <CustomButton title='Adicionar Usuário' handleClick={handleButtonPress} />
       )}
     </SafeAreaView>
   );

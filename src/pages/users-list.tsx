@@ -1,7 +1,7 @@
 import React from 'react';
 import { FlatList, Image, SafeAreaView, Text, View } from 'react-native';
 import { userItemInterface } from '../interfaces';
-import { general, loadingGifStyle, usersPage } from '../styles';
+import { general, usersPage } from '../styles';
 import { client } from '../services/apollo-client';
 import { usersQueryGQL } from '../services/graph-ql';
 import { useQuery } from '@apollo/client';
@@ -28,7 +28,7 @@ const UsersList = (props: NavigationComponentProps) => {
   };
   return (
     <SafeAreaView style={general.centeredWrapper}>
-      {loading && !data && <Image source={loadingGif.src} style={loadingGifStyle} />}
+      {loading && !data && <Image source={loadingGif.src} style={general.loadingGifStyle} />}
       {error && <Text style={usersPage.error}>{error.message}</Text>}
       {data && (
         <FlatList
@@ -40,7 +40,7 @@ const UsersList = (props: NavigationComponentProps) => {
           onEndReachedThreshold={0.15}
           ListFooterComponent={
             loading && data ? (
-              <Image source={loadingGif.src} style={[loadingGifStyle, { alignSelf: 'center' }]} />
+              <Image source={loadingGif.src} style={[general.loadingGifStyle, { alignSelf: 'center' }]} />
             ) : null
           }
         />

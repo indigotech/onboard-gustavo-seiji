@@ -1,8 +1,11 @@
 import { StyleSheet } from 'react-native';
 
-export const loadingGifStyle = { width: 40, height: 40 };
-
 export const general = StyleSheet.create({
+  loadingGifStyle: {
+    width: 40,
+    height: 40,
+    marginBottom: 15,
+  },
   textInput: {
     paddingVertical: 5,
     paddingHorizontal: 10,
@@ -39,6 +42,11 @@ export const general = StyleSheet.create({
     alignItems: 'center',
     padding: 10,
   },
+  errorText: {
+    color: 'red',
+    marginBottom: 15,
+    marginLeft: '5%',
+  },
 });
 
 export const addUserButton = StyleSheet.create({
@@ -58,14 +66,6 @@ export const addUserButton = StyleSheet.create({
     height: 25,
   },
 });
-
-export const loginPage = StyleSheet.create({
-  errorText: {
-    color: 'red',
-    marginBottom: 15,
-  },
-});
-
 export const usersPage = StyleSheet.create({
   userItem: {
     marginVertical: 5,

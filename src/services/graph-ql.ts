@@ -31,3 +31,11 @@ export const usersQueryGQL = gql`
     }
   }
 `;
+
+export const createUserMutationGQL = gql`
+  mutation create($data: UserInputType!) {
+    createUser(data: $data) {
+      id
+    }
+  }
+`;
