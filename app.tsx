@@ -9,7 +9,7 @@
  */
 
 import React from 'react';
-import { SafeAreaView, Text, TextInput, View, Image, useColorScheme, TouchableOpacity } from 'react-native';
+import { SafeAreaView, Text, TextInput, View, Image, TouchableOpacity } from 'react-native';
 
 import { validateLogin } from './src/utils/login-validator';
 import { useMutation } from '@apollo/client';
