@@ -27,30 +27,67 @@ export const loginPageStyles = StyleSheet.create({
     height: '100%',
     marginTop: 20,
   },
+  errorText: {
+    color: 'red',
+    marginBottom: 15,
+  },
+});
+export const general = StyleSheet.create({
   textInput: {
     paddingVertical: 5,
     paddingHorizontal: 10,
     borderColor: 'black',
     borderWidth: 1,
     borderRadius: 6,
-    marginBottom: 15,
   },
   inputContainer: {
     width: '90%',
+    marginBottom: 15,
   },
-  loginButton: {
+  centeredWrapper: {
+    height: '100%',
+    alignItems: 'center',
+    marginTop: 20,
+  },
+  radioButtonWrapper: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  radioButton: {
+    height: 15,
+    aspectRatio: 1,
+    backgroundColor: '#ccc',
+    borderRadius: 12.5,
+    marginRight: 5,
+    borderWidth: 2,
+    borderColor: '#ccc',
+  },
+  button: {
     width: '90%',
     backgroundColor: '#007AFF',
     borderRadius: 6,
     alignItems: 'center',
     padding: 10,
   },
-  errorText: {
-    color: 'red',
-    marginBottom: 15,
-  },
 });
 
+export const addUserButton = StyleSheet.create({
+  wrapper: {
+    position: 'absolute',
+    bottom: 35,
+    right: 25,
+    backgroundColor: 'black',
+    width: 50,
+    height: 50,
+    borderRadius: 25,
+    justifyContent: 'space-around',
+    alignItems: 'center',
+  },
+  img: {
+    width: 25,
+    height: 25,
+  },
+});
 export const usersPageStyles = StyleSheet.create({
   wrapper: {
     height: '100%',
@@ -68,11 +105,8 @@ export const usersPageStyles = StyleSheet.create({
     width: '100%',
     alignSelf: 'flex-start',
   },
-  name: {
-    width: '100%',
-  },
-  email: {
-    width: '100%',
+  userText: {
+    fontSize: 18,
   },
   error: {
     color: 'red',

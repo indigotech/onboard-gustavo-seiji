@@ -16,13 +16,11 @@ import { useMutation } from '@apollo/client';
 import { client } from './src/services/apollo-client';
 import { loginMutationGQL } from './src/services/graph-ql';
 import { Navigation, NavigationComponentProps } from 'react-native-navigation';
-import { loadingGifStyle, loginPageStyles } from './src/styles';
-import { Colors } from 'react-native/Libraries/NewAppScreen';
+import { general, loadingGifStyle, loginPageStyles } from './src/styles';
 import { getStorageItem, setStorageItem } from './src/services/persistency';
-import { loadingGif } from './src/utils/loading-gif';
+import { loadingGif } from './src/utils/get-media';
 
 const App = (props: NavigationComponentProps) => {
-  const isDarkMode = useColorScheme() === 'dark';
   const [errorMessage, setErrorMessage] = React.useState('');
   const email = React.useRef('');
   const password = React.useRef('');
@@ -37,7 +35,8 @@ const App = (props: NavigationComponentProps) => {
             options: {
               topBar: {
                 title: {
-                  text: 'Users',
+                  text: 'Usuários',
+                  alignment: 'center',
                 },
               },
             },
@@ -58,7 +57,8 @@ const App = (props: NavigationComponentProps) => {
             options: {
               topBar: {
                 title: {
-                  text: 'Users',
+                  text: 'Usuários',
+                  alignment: 'center',
                 },
               },
             },
@@ -82,26 +82,19 @@ const App = (props: NavigationComponentProps) => {
   };
 
   return (
-    <SafeAreaView
-      style={[
-        loginPageStyles.loginPageWrapper,
-        {
-          backgroundColor: isDarkMode ? Colors.darker : Colors.white,
-        },
-      ]}
-    >
-      <View style={loginPageStyles.inputContainer}>
+    <SafeAreaView style={general.centeredWrapper}>
+      <View style={general.inputContainer}>
         <Text>E-mail</Text>
         <TextInput
-          style={loginPageStyles.textInput}
+          style={general.textInput}
           onChangeText={(text) => (email.current = text)}
           placeholder='Ex:joao.silva@gmail.com'
         />
       </View>
-      <View style={loginPageStyles.inputContainer}>
+      <View style={general.inputContainer}>
         <Text>Senha</Text>
         <TextInput
-          style={loginPageStyles.textInput}
+          style={general.textInput}
           secureTextEntry
           placeholder='Ex: senha123'
           onChangeText={(text) => (password.current = text)}
@@ -111,9 +104,9 @@ const App = (props: NavigationComponentProps) => {
       {loading ? (
         <Image source={loadingGif.src} style={loadingGifStyle} />
       ) : (
-        <TouchableOpacity style={loginPageStyles.loginButton} onPress={handleButtonPress}>
+        <TouchableOpacity style={general.button} onPress={handleButtonPress}>
           <View>
-            <Text style={{ color: 'white' }}>{loading ? 'Carregando' : 'Login'}</Text>
+            <Text style={{ color: 'white' }}>Login</Text>
           </View>
         </TouchableOpacity>
       )}

@@ -1,12 +1,13 @@
 import React from 'react';
 import { FlatList, Image, SafeAreaView, Text, TouchableOpacity } from 'react-native';
 import { userItemInterface } from '../interfaces';
-import { loadingGifStyle, usersPageStyles } from '../styles';
+import { loadingGifStyle, usersPageStyles, general } from '../styles';
 import { client } from '../services/apollo-client';
 import { usersQueryGQL } from '../services/graph-ql';
 import { useQuery } from '@apollo/client';
-import { loadingGif } from '../utils/loading-gif';
 import { Navigation, NavigationComponentProps } from 'react-native-navigation';
+import { loadingGif } from '../utils/get-media';
+import AddUserButton from '../components/add-user-button';
 
 const UsersList = (props: NavigationComponentProps) => {
   const { data, loading, error, fetchMore } = useQuery(usersQueryGQL, {
@@ -62,6 +63,7 @@ const UsersList = (props: NavigationComponentProps) => {
           }
         />
       )}
+      <AddUserButton componentId={props.componentId} />
     </SafeAreaView>
   );
 };

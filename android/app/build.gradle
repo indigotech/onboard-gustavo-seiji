@@ -300,6 +300,8 @@ if (isNewArchitectureEnabled()) {
             substitute(module("com.facebook.react:hermes-engine"))
                     .using(project(":ReactAndroid:hermes-engine"))
                     .because("On New Architecture we're building Hermes from source")
+            substitute module("com.redmadrobot:input-mask-android:6.0.0") using module('com.github.RedMadRobot:input-mask-android:6.1.0')
+
         }
     }
 }
