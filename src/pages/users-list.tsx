@@ -1,13 +1,15 @@
 import React from 'react';
 import { FlatList, Image, SafeAreaView, Text, View } from 'react-native';
-import { userItemInterface } from './interfaces';
-import { loadingGifStyle, usersPage } from './styles';
-import { client } from './services/apollo-client';
-import { usersQueryGQL } from './services/graph-ql';
+import { userItemInterface } from '../interfaces';
+import { general, loadingGifStyle, usersPage } from '../styles';
+import { client } from '../services/apollo-client';
+import { usersQueryGQL } from '../services/graph-ql';
 import { useQuery } from '@apollo/client';
-import { loadingGif } from './utils/loading-gif';
+import { loadingGif } from '../utils/get-media';
+import AddUserButton from '../components/add-user-button';
+import { NavigationComponentProps } from 'react-native-navigation';
 
-const UsersList = () => {
+const UsersList = (props: NavigationComponentProps) => {
   const { data, loading, error, fetchMore } = useQuery(usersQueryGQL, {
     client,
     variables: { pageInfo: { offset: 0, limit: 20 } },
@@ -25,8 +27,7 @@ const UsersList = () => {
     }
   };
   return (
-    <SafeAreaView style={usersPage.wrapper}>
-      <Text style={usersPage.title}>Lista de usuários</Text>
+    <SafeAreaView style={general.centeredWrapper}>
       {loading && !data && <Image source={loadingGif.src} style={loadingGifStyle} />}
       {error && <Text style={usersPage.error}>{error.message}</Text>}
       {data && (
@@ -44,6 +45,7 @@ const UsersList = () => {
           }
         />
       )}
+      <AddUserButton componentId={props.componentId} />
     </SafeAreaView>
   );
 };
