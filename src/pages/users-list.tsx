@@ -1,7 +1,7 @@
 import React from 'react';
 import { FlatList, Image, SafeAreaView, Text, TouchableOpacity } from 'react-native';
 import { userItemInterface } from '../interfaces';
-import { loadingGifStyle, usersPageStyles } from '../styles';
+import { general, loadingGifStyle, usersPageStyles } from '../styles';
 import { client } from '../services/apollo-client';
 import { usersQueryGQL } from '../services/graph-ql';
 import { useQuery } from '@apollo/client';
@@ -44,8 +44,7 @@ const UsersList = (props: NavigationComponentProps) => {
     }
   };
   return (
-    <SafeAreaView style={usersPageStyles.wrapper}>
-      <Text style={usersPageStyles.title}>Lista de usuários</Text>
+    <SafeAreaView style={general.centeredWrapper}>
       {loading && !data && <Image source={loadingGif.src} style={loadingGifStyle} />}
       {error && <Text style={usersPageStyles.error}>{error.message}</Text>}
       {data && (

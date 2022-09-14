@@ -5,8 +5,8 @@
 import App from './app.tsx';
 import { Navigation } from 'react-native-navigation';
 import UsersList from './src/pages/users-list';
-import UserDetails from './src/pages/user-details';
 import AddUser from './src/pages/add-user';
+import UserDetails from './src/pages/user-details';
 
 Navigation.registerComponent('Onboard', () => App);
 Navigation.registerComponent('Details', () => UserDetails);
