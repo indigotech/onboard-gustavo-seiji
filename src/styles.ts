@@ -33,6 +33,11 @@ export const loginPageStyles = StyleSheet.create({
   },
 });
 export const general = StyleSheet.create({
+  loadingGifStyle: {
+    width: 40,
+    height: 40,
+    marginBottom: 15,
+  },
   textInput: {
     paddingVertical: 5,
     paddingHorizontal: 10,
@@ -68,6 +73,11 @@ export const general = StyleSheet.create({
     borderRadius: 6,
     alignItems: 'center',
     padding: 10,
+  },
+  errorText: {
+    color: 'red',
+    marginBottom: 15,
+    marginLeft: '5%',
   },
 });
 
