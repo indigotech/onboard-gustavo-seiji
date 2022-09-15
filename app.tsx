@@ -77,10 +77,8 @@ const App = (props: NavigationComponentProps) => {
 
   const handleButtonPress = () => {
     const loginValidatorResult = validateLogin(email.current, password.current);
-    if (errorMessage !== '') {
-      setErrorMessage(loginValidatorResult);
-    } else {
-      setErrorMessage('');
+    setErrorMessage(loginValidatorResult);
+    if (loginValidatorResult === '') {
       login();
     }
   };
