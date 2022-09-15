@@ -3,29 +3,11 @@ import { SafeAreaView, ScrollView, Text, TouchableOpacity, View } from 'react-na
 import TextInputComponent from '../components/TextInput';
 import { general } from '../styles';
 import TextInputMask from 'react-native-text-input-mask';
+import { formatDate } from '../utils/format-date';
 
 const AddUser = () => {
   const [role, setRole] = React.useState('user');
   const [date, setDate] = React.useState('');
-  const handleDateChange = (formatted: string) => {
-    const formattedArray = formatted.split('/');
-    if (eval(formattedArray[0]) > 31) {
-      formattedArray[0] = '31';
-    }
-    if (eval(formattedArray[1]) > 12) {
-      formattedArray[1] = '12';
-    }
-    const currentDate = new Date();
-    if (eval(formattedArray[2]) > currentDate.getFullYear()) {
-      formattedArray[2] = currentDate.getFullYear().toString();
-    }
-    if (formatted.length === 10) {
-      if (currentDate.getFullYear() - eval(formattedArray[2]) > 130) {
-        formattedArray[2] = (currentDate.getFullYear() - 130).toString();
-      }
-    }
-    setDate(formattedArray.join('/'));
-  };
   return (
     <ScrollView>
       <SafeAreaView style={general.centeredWrapper}>
@@ -37,7 +19,9 @@ const AddUser = () => {
             mask={'[00]/[00]/[0000]'}
             style={general.textInput}
             value={date}
-            onChangeText={handleDateChange}
+            onChangeText={(formatted) => {
+              setDate(formatDate(formatted));
+            }}
           />
         </View>
         <TextInputComponent name='E-mail' />
