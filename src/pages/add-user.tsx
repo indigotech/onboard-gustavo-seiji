@@ -1,6 +1,6 @@
 import React from 'react';
 import { SafeAreaView, ScrollView, Text, TouchableOpacity, View } from 'react-native';
-import TextInputComponent from '../components/TextInput';
+import TextInputComponent from '../components/text-input';
 import { general } from '../styles';
 import TextInputMask from 'react-native-text-input-mask';
 import { formatDate } from '../utils/format-date';
