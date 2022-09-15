@@ -25,6 +25,7 @@ const TextInputComponent = (props: {
         <TextInput
           style={general.textInput}
           secureTextEntry={props.password ? true : false}
+          value={props.value}
           onChangeText={props.handleChange}
           keyboardType={props.keyboardType ? props.keyboardType : 'default'}
         />

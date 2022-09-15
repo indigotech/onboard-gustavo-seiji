@@ -21,8 +21,7 @@ const AddUser = (props: NavigationComponentProps) => {
   const [error, setError] = React.useState('');
   const [createUser, { loading }] = useMutation(createUserMutationGQL, { client });
   const handleButtonPress = () => {
-    const error = validateCreateUser(fullName.current, phone.current, email.current, date, password.current);
-    setError(error);
+    setError(validateCreateUser(fullName.current, phone.current, email.current, date, password.current));
     if (error === '') {
       const dateArray = date.split('/');
       const birthDate = `${dateArray[2]}-${dateArray[1]}-${dateArray[0]}`;
