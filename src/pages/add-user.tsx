@@ -2,7 +2,6 @@ import React from 'react';
 import { Image, SafeAreaView, ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import TextInputComponent from '../components/text-input';
 import { general } from '../styles';
-import CustomButton from './custom-button';
 import { formatDate } from '../utils/format-date';
 import { createUserMutationGQL } from '../services/graph-ql';
 import { client } from '../services/apollo-client';
@@ -10,6 +9,8 @@ import { useMutation } from '@apollo/client';
 import { Navigation, NavigationComponentProps } from 'react-native-navigation';
 import { loadingGif } from '../utils/get-media';
 import { validateCreateUser } from '../utils/validate-create-user';
+import { ButtonStyled } from '../components/button-styled';
+import { Title } from '../components/title';
 
 const AddUser = (props: NavigationComponentProps) => {
   const [role, setRole] = React.useState('user');
@@ -21,8 +22,9 @@ const AddUser = (props: NavigationComponentProps) => {
   const [error, setError] = React.useState('');
   const [createUser, { loading }] = useMutation(createUserMutationGQL, { client });
   const handleButtonPress = () => {
-    setError(validateCreateUser(fullName.current, phone.current, email.current, date, password.current));
-    if (error === '') {
+    const createUserError = validateCreateUser(fullName.current, phone.current, email.current, date, password.current);
+    setError(createUserError);
+    if (createUserError === '') {
       const dateArray = date.split('/');
       const birthDate = `${dateArray[2]}-${dateArray[1]}-${dateArray[0]}`;
       createUser({
@@ -61,8 +63,14 @@ const AddUser = (props: NavigationComponentProps) => {
   return (
     <ScrollView>
       <SafeAreaView style={general.centeredWrapper}>
-        <TextInputComponent name='Nome Completo' handleChange={(value) => (fullName.current = value)} />
+        <Title>Criar Usuário</Title>
         <TextInputComponent
+          error={error ? true : false}
+          name='Nome Completo'
+          handleChange={(value) => (fullName.current = value)}
+        />
+        <TextInputComponent
+          error={error ? true : false}
           name='Telefone'
           mask={'([00]) [00000]-[0000]'}
           keyboardType='numeric'
@@ -73,13 +81,18 @@ const AddUser = (props: NavigationComponentProps) => {
           }}
         />
         <TextInputComponent
+          error={error ? true : false}
           name='Data de Nascimento'
           mask={'[00]/[00]/[0000]'}
           keyboardType='numeric'
           value={date}
           handleChange={(formatted) => setDate(formatDate(formatted))}
         />
-        <TextInputComponent name='E-mail' handleChange={(value) => (email.current = value)} />
+        <TextInputComponent
+          error={error ? true : false}
+          name='E-mail'
+          handleChange={(value) => (email.current = value)}
+        />
         <View style={general.inputContainer}>
           <Text>Função do Usuário</Text>
           <TouchableOpacity
@@ -101,10 +114,15 @@ const AddUser = (props: NavigationComponentProps) => {
             <Text>Administrador</Text>
           </TouchableOpacity>
         </View>
-        <TextInputComponent password name='Senha' handleChange={(value) => (password.current = value)} />
+        <TextInputComponent
+          error={error ? true : false}
+          password
+          name='Senha'
+          handleChange={(value) => (password.current = value)}
+        />
         {error && <Text style={general.errorText}>{error}</Text>}
         {loading && <Image source={loadingGif.src} style={general.loadingGifStyle} />}
-        <CustomButton title='Adicionar Usuário' handleClick={handleButtonPress} />
+        <ButtonStyled onPress={handleButtonPress}>Adicionar Usuário</ButtonStyled>
       </SafeAreaView>
     </ScrollView>
   );
