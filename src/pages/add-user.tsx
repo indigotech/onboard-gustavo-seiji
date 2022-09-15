@@ -1,13 +1,13 @@
 import React from 'react';
 import { Image, SafeAreaView, ScrollView, Text, TouchableOpacity, View } from 'react-native';
-import TextInputComponent from '../components/text-input';
+import { Navigation, NavigationComponentProps } from 'react-native-navigation';
+import { useMutation } from '@apollo/client';
+import { TextInputComponent } from '../components/text-input';
 import { general } from '../styles';
-import CustomButton from './custom-button';
+import { CustomButton } from './custom-button';
 import { formatDate } from '../utils/format-date';
 import { createUserMutationGQL } from '../services/graph-ql';
 import { client } from '../services/apollo-client';
-import { useMutation } from '@apollo/client';
-import { Navigation, NavigationComponentProps } from 'react-native-navigation';
 import { loadingGif } from '../utils/get-media';
 import { validateCreateUser } from '../utils/validate-create-user';
 
@@ -19,7 +19,9 @@ const AddUser = (props: NavigationComponentProps) => {
   const email = React.useRef('');
   const password = React.useRef('');
   const [error, setError] = React.useState('');
+
   const [createUser, { loading }] = useMutation(createUserMutationGQL, { client });
+
   const handleButtonPress = () => {
     setError(validateCreateUser(fullName.current, phone.current, email.current, date, password.current));
     if (error === '') {
@@ -57,6 +59,11 @@ const AddUser = (props: NavigationComponentProps) => {
       });
     }
   };
+  const handlePhoneChange = (formatted: string, extracted?: string) => {
+    if (extracted) {
+      phone.current = extracted;
+    }
+  };
 
   return (
     <ScrollView>
@@ -66,11 +73,7 @@ const AddUser = (props: NavigationComponentProps) => {
           name='Telefone'
           mask={'([00]) [00000]-[0000]'}
           keyboardType='numeric'
-          handleChange={(formatted, extracted) => {
-            if (extracted) {
-              phone.current = extracted;
-            }
-          }}
+          handleChange={handlePhoneChange}
         />
         <TextInputComponent
           name='Data de Nascimento'

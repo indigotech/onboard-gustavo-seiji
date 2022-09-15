@@ -1,11 +1,11 @@
 import React from 'react';
 import { FlatList, Image, SafeAreaView, Text, TouchableOpacity } from 'react-native';
+import { useQuery } from '@apollo/client';
+import { NavigationComponentProps } from 'react-native-navigation';
 import { userItemInterface } from '../interfaces';
 import { general, usersPageStyles } from '../styles';
 import { client } from '../services/apollo-client';
 import { usersQueryGQL } from '../services/graph-ql';
-import { useQuery } from '@apollo/client';
-import { Navigation, NavigationComponentProps } from 'react-native-navigation';
 import { loadingGif } from '../utils/get-media';
 import AddUserButton from '../components/add-user-button';
 
@@ -31,6 +31,11 @@ const UsersList = (props: NavigationComponentProps) => {
         },
       },
     });
+
+  const handleEndReach = () => {
+    if (data.users.pageInfo.hasNextPage && !loading) {
+      fetchMore({ variables: { pageInfo: { offset: data.users.pageInfo.offset + 20, limit: 20 } } });
+    }
   };
   const renderUser = ({ item }: { item: userItemInterface }) => (
     <TouchableOpacity style={usersPageStyles.userItem} onPress={() => handleItemTap(item.id)}>
@@ -38,11 +43,7 @@ const UsersList = (props: NavigationComponentProps) => {
       <Text>{item.email}</Text>
     </TouchableOpacity>
   );
-  const handleEndReach = () => {
-    if (data.users.pageInfo.hasNextPage && !loading) {
-      fetchMore({ variables: { pageInfo: { offset: data.users.pageInfo.offset + 20, limit: 20 } } });
-    }
-  };
+
   return (
     <SafeAreaView style={general.centeredWrapper}>
       {loading && !data && <Image source={loadingGif.src} style={general.loadingGifStyle} />}

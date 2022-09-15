@@ -10,24 +10,24 @@
 
 import React from 'react';
 import { SafeAreaView, Text, Image } from 'react-native';
+import { Navigation, NavigationComponentProps } from 'react-native-navigation';
+import { useMutation } from '@apollo/client';
 
 import { validateLogin } from './src/utils/login-validator';
-import { useMutation } from '@apollo/client';
 import { client } from './src/services/apollo-client';
 import { loginMutationGQL } from './src/services/graph-ql';
-import { Navigation, NavigationComponentProps } from 'react-native-navigation';
 import { general } from './src/styles';
 import { getStorageItem, setStorageItem } from './src/services/persistency';
 import { loadingGif } from './src/utils/get-media';
-import TextInputComponent from './src/components/text-input';
-import CustomButton from './src/pages/custom-button';
+import { TextInputComponent } from './src/components/text-input';
+import { CustomButton } from './src/pages/custom-button';
 
 const App = (props: NavigationComponentProps) => {
   const [errorMessage, setErrorMessage] = React.useState('');
   const email = React.useRef('');
   const password = React.useRef('');
-  const [loginMutation, { loading }] = useMutation(loginMutationGQL, { client });
 
+  const [loginMutation, { loading }] = useMutation(loginMutationGQL, { client });
   React.useEffect(() => {
     getStorageItem('token').then((token) => {
       if (token) {
@@ -72,7 +72,6 @@ const App = (props: NavigationComponentProps) => {
       },
     });
   };
-
   const handleButtonPress = () => {
     const loginValidatorResult = validateLogin(email.current, password.current);
     if (loginValidatorResult !== '') {

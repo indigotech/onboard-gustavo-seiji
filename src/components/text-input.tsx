@@ -1,16 +1,10 @@
 import React from 'react';
-import { KeyboardType, Text, TextInput, View } from 'react-native';
+import { Text, TextInput, View } from 'react-native';
 import TextInputMask from 'react-native-text-input-mask';
+import { TextInputComponentProps } from '../interfaces';
 import { general } from '../styles';
 
-const TextInputComponent = (props: {
-  name: string;
-  password?: boolean;
-  handleChange: (value: string, extracted?: string) => void;
-  mask?: string;
-  value?: string;
-  keyboardType?: KeyboardType;
-}) => {
+export const TextInputComponent = (props: TextInputComponentProps) => {
   return (
     <View style={general.inputContainer}>
       <Text>{props.name}</Text>
@@ -34,4 +28,3 @@ const TextInputComponent = (props: {
     </View>
   );
 };
-export default TextInputComponent;
