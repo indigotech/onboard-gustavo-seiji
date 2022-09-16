@@ -1,8 +1,15 @@
 import React from 'react';
-import { Text, TextInput, View } from 'react-native';
+import { KeyboardType, Text, TextInput, View } from 'react-native';
 import TextInputMask from 'react-native-text-input-mask';
-import { TextInputComponentProps } from '../interfaces';
 import { general } from '../styles';
+export interface TextInputComponentProps {
+  name: string;
+  password?: boolean;
+  onChange: (value: string, extracted?: string) => void;
+  mask?: string;
+  value?: string;
+  keyboardType?: KeyboardType;
+}
 
 export const TextInputComponent = (props: TextInputComponentProps) => {
   return (
@@ -14,14 +21,14 @@ export const TextInputComponent = (props: TextInputComponentProps) => {
           style={general.textInput}
           value={props.value}
           keyboardType={props.keyboardType ? props.keyboardType : 'default'}
-          onChangeText={props.handleChange}
+          onChangeText={props.onChange}
         />
       ) : (
         <TextInput
           style={general.textInput}
           secureTextEntry={props.password ? true : false}
           value={props.value}
-          onChangeText={props.handleChange}
+          onChangeText={props.onChange}
           keyboardType={props.keyboardType ? props.keyboardType : 'default'}
         />
       )}

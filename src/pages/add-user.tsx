@@ -69,21 +69,21 @@ const AddUser = (props: NavigationComponentProps) => {
   return (
     <ScrollView>
       <SafeAreaView style={general.centeredWrapper}>
-        <TextInputComponent name='Nome Completo' handleChange={(value) => (fullName.current = value)} />
+        <TextInputComponent name='Nome Completo' onChange={(value) => (fullName.current = value)} />
         <TextInputComponent
           name='Telefone'
           mask={'([00]) [00000]-[0000]'}
           keyboardType='numeric'
-          handleChange={handlePhoneChange}
+          onChange={handlePhoneChange}
         />
         <TextInputComponent
           name='Data de Nascimento'
           mask={'[00]/[00]/[0000]'}
           keyboardType='numeric'
           value={date}
-          handleChange={(formatted) => setDate(formatDate(formatted))}
+          onChange={(formatted) => setDate(formatDate(formatted))}
         />
-        <TextInputComponent name='E-mail' handleChange={(value) => (email.current = value)} />
+        <TextInputComponent name='E-mail' onChange={(value) => (email.current = value)} />
         <View style={general.inputContainer}>
           <Text>Função do Usuário</Text>
           <TouchableOpacity
@@ -105,10 +105,10 @@ const AddUser = (props: NavigationComponentProps) => {
             <Text>Administrador</Text>
           </TouchableOpacity>
         </View>
-        <TextInputComponent password name='Senha' handleChange={(value) => (password.current = value)} />
+        <TextInputComponent password name='Senha' onChange={(value) => (password.current = value)} />
         {error && <Text style={general.errorText}>{error}</Text>}
         {loading && <Image source={loadingGif.src} style={general.loadingGifStyle} />}
-        <CustomButton title='Adicionar Usuário' handleClick={handleButtonPress} />
+        <CustomButton title='Adicionar Usuário' onClick={handleButtonPress} />
       </SafeAreaView>
     </ScrollView>
   );
