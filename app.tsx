@@ -16,7 +16,7 @@ import { useMutation } from '@apollo/client';
 import { client } from './src/services/apollo-client';
 import { loginMutationGQL } from './src/services/graph-ql';
 import { Navigation, NavigationComponentProps } from 'react-native-navigation';
-import { loadingGifStyle, loginPage } from './src/styles';
+import { loadingGifStyle, loginPageStyles } from './src/styles';
 import { Colors } from 'react-native/Libraries/NewAppScreen';
 import { getStorageItem, setStorageItem } from './src/services/persistency';
 import { loadingGif } from './src/utils/loading-gif';
@@ -84,34 +84,34 @@ const App = (props: NavigationComponentProps) => {
   return (
     <SafeAreaView
       style={[
-        loginPage.loginPageWrapper,
+        loginPageStyles.loginPageWrapper,
         {
           backgroundColor: isDarkMode ? Colors.darker : Colors.white,
         },
       ]}
     >
-      <View style={loginPage.inputContainer}>
+      <View style={loginPageStyles.inputContainer}>
         <Text>E-mail</Text>
         <TextInput
-          style={loginPage.textInput}
+          style={loginPageStyles.textInput}
           onChangeText={(text) => (email.current = text)}
           placeholder='Ex:joao.silva@gmail.com'
         />
       </View>
-      <View style={loginPage.inputContainer}>
+      <View style={loginPageStyles.inputContainer}>
         <Text>Senha</Text>
         <TextInput
-          style={loginPage.textInput}
+          style={loginPageStyles.textInput}
           secureTextEntry
           placeholder='Ex: senha123'
           onChangeText={(text) => (password.current = text)}
         />
       </View>
-      {errorMessage && <Text style={loginPage.errorText}>{errorMessage}</Text>}
+      {errorMessage && <Text style={loginPageStyles.errorText}>{errorMessage}</Text>}
       {loading ? (
         <Image source={loadingGif.src} style={loadingGifStyle} />
       ) : (
-        <TouchableOpacity style={loginPage.loginButton} onPress={handleButtonPress}>
+        <TouchableOpacity style={loginPageStyles.loginButton} onPress={handleButtonPress}>
           <View>
             <Text style={{ color: 'white' }}>{loading ? 'Carregando' : 'Login'}</Text>
           </View>
