@@ -4,7 +4,7 @@ import { Image, SafeAreaView, Text } from 'react-native';
 import { client } from '../services/apollo-client';
 import { userDetailsQueryGQL } from '../services/graph-ql';
 import { detailsPageStyles, loadingGifStyle, usersPageStyles } from '../styles';
-import { loadingGif } from '../utils/loading-gif';
+import { loadingGif } from '../utils/get-media';
 import { NavigationComponentProps } from 'react-native-navigation';
 import { UserInfo } from '../components/user-info';
 
