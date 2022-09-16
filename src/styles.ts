@@ -2,7 +2,7 @@ import { StyleSheet } from 'react-native';
 
 export const loadingGifStyle = { width: 40, height: 40 };
 
-export const detailsPage = StyleSheet.create({
+export const detailsPageStyles = StyleSheet.create({
   title: {
     fontSize: 18,
     fontWeight: 'bold',
@@ -21,7 +21,7 @@ export const detailsPage = StyleSheet.create({
   },
 });
 
-export const loginPage = StyleSheet.create({
+export const loginPageStyles = StyleSheet.create({
   loginPageWrapper: {
     alignItems: 'center',
     height: '100%',
@@ -51,7 +51,7 @@ export const loginPage = StyleSheet.create({
   },
 });
 
-export const usersPage = StyleSheet.create({
+export const usersPageStyles = StyleSheet.create({
   wrapper: {
     height: '100%',
     alignItems: 'center',

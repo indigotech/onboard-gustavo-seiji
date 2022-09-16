@@ -1,37 +1,30 @@
 import { useQuery } from '@apollo/client';
 import React from 'react';
-import { Image, SafeAreaView, Text, View } from 'react-native';
-import { PropsWithId } from '../interfaces';
+import { Image, SafeAreaView, Text } from 'react-native';
 import { client } from '../services/apollo-client';
 import { userDetailsQueryGQL } from '../services/graph-ql';
-import { detailsPage, loadingGifStyle, usersPage } from '../styles';
+import { detailsPageStyles, loadingGifStyle, usersPageStyles } from '../styles';
 import { loadingGif } from '../utils/loading-gif';
+import { NavigationComponentProps } from 'react-native-navigation';
+import { UserInfo } from '../components/user-info';
 
-const UserDetails = (props: PropsWithId) => {
+interface UserDetailsProps extends NavigationComponentProps {
+  id: string;
+}
+
+const UserDetails = (props: UserDetailsProps) => {
   const { data, loading, error } = useQuery(userDetailsQueryGQL, { client, variables: { id: props.id } });
   return (
-    <SafeAreaView style={usersPage.wrapper}>
+    <SafeAreaView style={usersPageStyles.wrapper}>
       {loading && !data && <Image source={loadingGif.src} style={loadingGifStyle} />}
-      {error && <Text style={usersPage.error}>{error.message}</Text>}
+      {error && <Text style={usersPageStyles.error}>{error.message}</Text>}
       {data && (
         <>
-          <Text style={detailsPage.h1}>{data.user.name}</Text>
-          <View style={detailsPage.dataWrapper}>
-            <Text style={detailsPage.title}>Telefone</Text>
-            <Text style={detailsPage.data}>{data.user.phone}</Text>
-          </View>
-          <View style={detailsPage.dataWrapper}>
-            <Text style={detailsPage.title}>Data de nascimento</Text>
-            <Text style={detailsPage.data}>{data.user.birthDate}</Text>
-          </View>
-          <View style={detailsPage.dataWrapper}>
-            <Text style={detailsPage.title}>E-mail</Text>
-            <Text style={detailsPage.data}>{data.user.email}</Text>
-          </View>
-          <View style={detailsPage.dataWrapper}>
-            <Text style={detailsPage.title}>Função</Text>
-            <Text style={detailsPage.data}>{data.user.role === 'admin' ? 'Administrador' : 'Usuário'}</Text>
-          </View>
+          <Text style={detailsPageStyles.h1}>{data.user.name}</Text>
+          <UserInfo title='Telefone' info={data.user.phone} />
+          <UserInfo title='Data de Nascimento' info={data.user.birthDate} />
+          <UserInfo title='E-mail' info={data.user.email} />
+          <UserInfo title='Função' info={data.user.role === 'admin' ? 'Administrador' : 'Usuário'} />
         </>
       )}
     </SafeAreaView>

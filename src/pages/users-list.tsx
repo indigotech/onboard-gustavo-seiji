@@ -1,7 +1,7 @@
 import React from 'react';
 import { FlatList, Image, SafeAreaView, Text, TouchableOpacity } from 'react-native';
 import { userItemInterface } from '../interfaces';
-import { loadingGifStyle, usersPage } from '../styles';
+import { loadingGifStyle, usersPageStyles } from '../styles';
 import { client } from '../services/apollo-client';
 import { usersQueryGQL } from '../services/graph-ql';
 import { useQuery } from '@apollo/client';
@@ -14,7 +14,7 @@ const UsersList = (props: NavigationComponentProps) => {
     variables: { pageInfo: { offset: 0, limit: 20 } },
     notifyOnNetworkStatusChange: true,
   });
-  const handleButtonPress = (id: string) => {
+  const handleItemTap = (id: string) => {
     Navigation.push(props.componentId, {
       component: {
         passProps: {
@@ -32,7 +32,7 @@ const UsersList = (props: NavigationComponentProps) => {
     });
   };
   const renderUser = ({ item }: { item: userItemInterface }) => (
-    <TouchableOpacity style={usersPage.userItem} onPress={() => handleButtonPress(item.id)}>
+    <TouchableOpacity style={usersPageStyles.userItem} onPress={() => handleItemTap(item.id)}>
       <Text>{item.name}</Text>
       <Text>{item.email}</Text>
     </TouchableOpacity>
@@ -43,13 +43,13 @@ const UsersList = (props: NavigationComponentProps) => {
     }
   };
   return (
-    <SafeAreaView style={usersPage.wrapper}>
-      <Text style={usersPage.title}>Lista de usuários</Text>
+    <SafeAreaView style={usersPageStyles.wrapper}>
+      <Text style={usersPageStyles.title}>Lista de usuários</Text>
       {loading && !data && <Image source={loadingGif.src} style={loadingGifStyle} />}
-      {error && <Text style={usersPage.error}>{error.message}</Text>}
+      {error && <Text style={usersPageStyles.error}>{error.message}</Text>}
       {data && (
         <FlatList
-          style={usersPage.usersContainer}
+          style={usersPageStyles.usersContainer}
           data={data.users.nodes}
           renderItem={renderUser}
           keyExtractor={(item) => item.id}
