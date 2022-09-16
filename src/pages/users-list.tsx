@@ -1,7 +1,7 @@
 import React from 'react';
 import { FlatList, Image, SafeAreaView, Text, TouchableOpacity } from 'react-native';
 import { useQuery } from '@apollo/client';
-import { NavigationComponentProps } from 'react-native-navigation';
+import { Navigation, NavigationComponentProps } from 'react-native-navigation';
 import { userItemInterface } from '../interfaces';
 import { general, usersPageStyles } from '../styles';
 import { client } from '../services/apollo-client';
@@ -12,7 +12,7 @@ import AddUserButton from '../components/add-user-button';
 const UsersList = (props: NavigationComponentProps) => {
   const { data, loading, error, fetchMore } = useQuery(usersQueryGQL, {
     client,
-    variables: { pageInfo: { offset: 0, limit: 20 } },
+    variables: { pageInfo: { offset: 420, limit: 20 } },
     notifyOnNetworkStatusChange: true,
   });
   const handleItemTap = (id: string) => {
@@ -31,6 +31,7 @@ const UsersList = (props: NavigationComponentProps) => {
         },
       },
     });
+  };
 
   const handleEndReach = () => {
     if (data.users.pageInfo.hasNextPage && !loading) {

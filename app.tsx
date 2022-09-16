@@ -84,13 +84,13 @@ const App = (props: NavigationComponentProps) => {
 
   return (
     <SafeAreaView style={general.centeredWrapper}>
-      <TextInputComponent name='E-mail' handleChange={(value) => (email.current = value)} />
-      <TextInputComponent name='Senha' handleChange={(value) => (password.current = value)} password />
+      <TextInputComponent name='E-mail' onChange={(value) => (email.current = value)} />
+      <TextInputComponent name='Senha' onChange={(value) => (password.current = value)} password />
       {errorMessage && <Text style={general.errorText}>{errorMessage}</Text>}
       {loading ? (
         <Image source={loadingGif.src} style={general.loadingGifStyle} />
       ) : (
-        <CustomButton title='Adicionar Usuário' handleClick={handleButtonPress} />
+        <CustomButton title='Adicionar Usuário' onClick={handleButtonPress} />
       )}
     </SafeAreaView>
   );
