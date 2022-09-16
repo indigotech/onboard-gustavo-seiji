@@ -9,23 +9,25 @@
  */
 
 import React from 'react';
-import { SafeAreaView, Text, TextInput, View, Image, TouchableOpacity } from 'react-native';
+import { SafeAreaView, Text, Image } from 'react-native';
+import { Navigation, NavigationComponentProps } from 'react-native-navigation';
+import { useMutation } from '@apollo/client';
 
 import { validateLogin } from './src/utils/login-validator';
-import { useMutation } from '@apollo/client';
 import { client } from './src/services/apollo-client';
 import { loginMutationGQL } from './src/services/graph-ql';
-import { Navigation, NavigationComponentProps } from 'react-native-navigation';
-import { general, loadingGifStyle, loginPageStyles } from './src/styles';
+import { general } from './src/styles';
 import { getStorageItem, setStorageItem } from './src/services/persistency';
 import { loadingGif } from './src/utils/get-media';
+import { TextInputComponent } from './src/components/text-input';
+import { CustomButton } from './src/pages/custom-button';
 
 const App = (props: NavigationComponentProps) => {
   const [errorMessage, setErrorMessage] = React.useState('');
   const email = React.useRef('');
   const password = React.useRef('');
-  const [loginMutation, { loading }] = useMutation(loginMutationGQL, { client });
 
+  const [loginMutation, { loading }] = useMutation(loginMutationGQL, { client });
   React.useEffect(() => {
     getStorageItem('token').then((token) => {
       if (token) {
@@ -70,7 +72,6 @@ const App = (props: NavigationComponentProps) => {
       },
     });
   };
-
   const handleButtonPress = () => {
     const loginValidatorResult = validateLogin(email.current, password.current);
     if (loginValidatorResult !== '') {
@@ -83,32 +84,13 @@ const App = (props: NavigationComponentProps) => {
 
   return (
     <SafeAreaView style={general.centeredWrapper}>
-      <View style={general.inputContainer}>
-        <Text>E-mail</Text>
-        <TextInput
-          style={general.textInput}
-          onChangeText={(text) => (email.current = text)}
-          placeholder='Ex:joao.silva@gmail.com'
-        />
-      </View>
-      <View style={general.inputContainer}>
-        <Text>Senha</Text>
-        <TextInput
-          style={general.textInput}
-          secureTextEntry
-          placeholder='Ex: senha123'
-          onChangeText={(text) => (password.current = text)}
-        />
-      </View>
-      {errorMessage && <Text style={loginPageStyles.errorText}>{errorMessage}</Text>}
+      <TextInputComponent name='E-mail' onChange={(value) => (email.current = value)} />
+      <TextInputComponent name='Senha' onChange={(value) => (password.current = value)} password />
+      {errorMessage && <Text style={general.errorText}>{errorMessage}</Text>}
       {loading ? (
-        <Image source={loadingGif.src} style={loadingGifStyle} />
+        <Image source={loadingGif.src} style={general.loadingGifStyle} />
       ) : (
-        <TouchableOpacity style={general.button} onPress={handleButtonPress}>
-          <View>
-            <Text style={{ color: 'white' }}>Login</Text>
-          </View>
-        </TouchableOpacity>
+        <CustomButton title='Adicionar Usuário' onClick={handleButtonPress} />
       )}
     </SafeAreaView>
   );
