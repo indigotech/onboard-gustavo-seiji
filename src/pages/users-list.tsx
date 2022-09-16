@@ -1,7 +1,7 @@
 import React from 'react';
 import { FlatList, Image, SafeAreaView, Text, TouchableOpacity } from 'react-native';
 import { userItemInterface } from '../interfaces';
-import { loadingGifStyle, usersPageStyles, general } from '../styles';
+import { loadingGifStyle, usersPageStyles } from '../styles';
 import { client } from '../services/apollo-client';
 import { usersQueryGQL } from '../services/graph-ql';
 import { useQuery } from '@apollo/client';
