@@ -12,7 +12,7 @@ import AddUserButton from '../components/add-user-button';
 const UsersList = (props: NavigationComponentProps) => {
   const { data, loading, error, fetchMore } = useQuery(usersQueryGQL, {
     client,
-    variables: { pageInfo: { offset: 420, limit: 20 } },
+    variables: { pageInfo: { offset: 0, limit: 20 } },
     notifyOnNetworkStatusChange: true,
   });
   const handleItemTap = (id: string) => {
