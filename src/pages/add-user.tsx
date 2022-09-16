@@ -23,8 +23,9 @@ const AddUser = (props: NavigationComponentProps) => {
   const [createUser, { loading }] = useMutation(createUserMutationGQL, { client });
 
   const handleButtonPress = () => {
-    setError(validateCreateUser(fullName.current, phone.current, email.current, date, password.current));
-    if (error === '') {
+    const createUserError = validateCreateUser(fullName.current, phone.current, email.current, date, password.current);
+    setError(createUserError);
+    if (createUserError === '') {
       const dateArray = date.split('/');
       const birthDate = `${dateArray[2]}-${dateArray[1]}-${dateArray[0]}`;
       createUser({
