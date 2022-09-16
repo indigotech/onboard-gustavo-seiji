@@ -9,7 +9,7 @@
  */
 
 import React from 'react';
-import { SafeAreaView, Text, Image } from 'react-native';
+import { SafeAreaView, Image } from 'react-native';
 
 import { validateLogin } from './src/utils/login-validator';
 import { useMutation } from '@apollo/client';
@@ -20,7 +20,9 @@ import { general } from './src/styles';
 import { getStorageItem, setStorageItem } from './src/services/persistency';
 import { loadingGif } from './src/utils/get-media';
 import TextInputComponent from './src/components/text-input';
-import CustomButton from './src/pages/custom-button';
+import { ButtonStyled } from './src/components/button-styled';
+import { Title } from './src/components/title';
+import { Caption } from './src/components/caption';
 
 const App = (props: NavigationComponentProps) => {
   const [errorMessage, setErrorMessage] = React.useState('');
@@ -75,23 +77,31 @@ const App = (props: NavigationComponentProps) => {
 
   const handleButtonPress = () => {
     const loginValidatorResult = validateLogin(email.current, password.current);
-    if (loginValidatorResult !== '') {
-      setErrorMessage(loginValidatorResult);
-    } else {
-      setErrorMessage('');
+    setErrorMessage(loginValidatorResult);
+    if (loginValidatorResult === '') {
       login();
     }
   };
 
   return (
     <SafeAreaView style={general.centeredWrapper}>
-      <TextInputComponent name='E-mail' handleChange={(value) => (email.current = value)} />
-      <TextInputComponent name='Senha' handleChange={(value) => (password.current = value)} password />
-      {errorMessage && <Text style={general.errorText}>{errorMessage}</Text>}
+      <Title>Bem vindo à Taqtile</Title>
+      <TextInputComponent
+        error={errorMessage ? true : false}
+        name='E-mail'
+        handleChange={(value) => (email.current = value)}
+      />
+      <TextInputComponent
+        error={errorMessage ? true : false}
+        name='Senha'
+        handleChange={(value) => (password.current = value)}
+        password
+      />
+      {errorMessage && <Caption style={general.errorText}>{errorMessage}</Caption>}
       {loading ? (
         <Image source={loadingGif.src} style={general.loadingGifStyle} />
       ) : (
-        <CustomButton title='Adicionar Usuário' handleClick={handleButtonPress} />
+        <ButtonStyled onPress={handleButtonPress}>Login</ButtonStyled>
       )}
     </SafeAreaView>
   );
